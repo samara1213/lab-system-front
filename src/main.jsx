@@ -8,11 +8,13 @@ import '@fontsource/roboto/700.css';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from './App';
+import { Provider } from 'react-redux';
+import { store } from './store';
 
 
 const theme = createTheme({
   palette: {
-    
+
     primary: {
       main: '#18202b',
     },
@@ -23,11 +25,13 @@ const theme = createTheme({
 });
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <CssBaseline/>
-          <App/>
-      </BrowserRouter>    
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <CssBaseline />
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
+    </Provider>
   </StrictMode>
 )

@@ -3,8 +3,15 @@ import { useState } from 'react'
 import { MenuOptions } from './MenuOptions'
 import MenuIcon from '@mui/icons-material/Menu';
 import { CorporateFare, Logout, Settings } from '@mui/icons-material';
+import { useUserStore } from '../hooks/useUserStore';
+import { useAuthStore } from '../hooks/useAuthStore';
 
 export const NavBar = () => {
+
+    // consultamos los datos del usuario que estan guardados en redux
+    const { userInfo } = useUserStore();
+
+    const { logout } = useAuthStore();
 
     const [openMenu, setOpenMenu] = useState(false)
 
@@ -16,9 +23,20 @@ export const NavBar = () => {
         setAnchorEl(event.currentTarget);
     };
 
+    // funcion para cerra el menu desplegable
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    /**
+     * funcion que se encarga de realizar el logout del ussuario
+     */
+    const logoutUser = () => {
+
+        // llamanos nuestra funcion del storage que tiene el metodo del logaut
+        logout();
+
+    }
 
     return (
         <>
@@ -41,18 +59,18 @@ export const NavBar = () => {
                         onClick={handleClick}
 
                     >
-                        <Avatar sx={{ bgcolor: '#673ab7'}}>FD</Avatar>
+                        <Avatar sx={{ bgcolor: '#673ab7' }}>FD</Avatar>
                     </IconButton>
                     <Menu
                         anchorEl={anchorEl}
                         id="account-menu"
                         open={open}
                         onClose={handleClose}
-                        onClick={handleClose}                                            
+                        onClick={handleClose}
                         slotProps={{
                             paper: {
                                 elevation: 0,
-                                sx: {                                                                    
+                                sx: {
                                     overflow: 'visible',
                                     filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                                     mt: 1.5,
@@ -81,19 +99,19 @@ export const NavBar = () => {
                         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                     >
                         <MenuItem onClick={handleClose}>
-                            <Avatar><CorporateFare/></Avatar> Nombre empresa
+                            <Avatar><CorporateFare /></Avatar> {userInfo.company.com_nombre}
                         </MenuItem>
                         <MenuItem onClick={handleClose}>
-                            <Avatar/> fd13122019@gmail.com
+                            <Avatar /> {userInfo.use_correo}
                         </MenuItem>
-                        <Divider />                 
+                        <Divider />
                         <MenuItem onClick={handleClose}>
                             <ListItemIcon>
                                 <Settings fontSize="small" />
                             </ListItemIcon>
                             Settings
                         </MenuItem>
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={logoutUser}>
                             <ListItemIcon>
                                 <Logout fontSize="small" />
                             </ListItemIcon>
