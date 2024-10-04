@@ -12,12 +12,13 @@ export const useForm = (initialForm = {}) => {
             ...formState,
             [name]: value,
         })
-    }
+    }  
 
     return {
         ...formState,
         formState,
         setformState,
         onInputChange,
+        
     }
 }

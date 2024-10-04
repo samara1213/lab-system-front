@@ -16,6 +16,13 @@ const arrayMenu = [
     icon: <GroupIcon />
 
   }
+  ,
+  {
+    title: 'Companias',
+    path: '/companies',
+    icon: <GroupIcon />
+
+  }
 ]
 
 export const MenuOptions = ({ setOpenMenu }) => {
