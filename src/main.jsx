@@ -21,6 +21,9 @@ const theme = createTheme({
     secondary: {
       main: '#f50057',
     },
+    tertiary: {
+      main: '#FF5722', // Color terciario
+    },
   }
 });
 createRoot(document.getElementById('root')).render(
