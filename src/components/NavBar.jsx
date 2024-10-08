@@ -115,7 +115,7 @@ export const NavBar = () => {
                             <ListItemIcon>
                                 <Logout fontSize="small" />
                             </ListItemIcon>
-                            Logout
+                            Salir
                         </MenuItem>
                     </Menu>
                 </Toolbar>

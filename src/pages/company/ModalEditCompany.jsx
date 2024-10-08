@@ -1,18 +1,19 @@
 import { Box, TextField } from '@mui/material'
 import Grid from '@mui/material/Grid2';
 import { useForm } from '../../hooks';
-import { MuiDialogCreate } from '../../components/MuiDialogCreate';
+import { MuiDialogEdit } from '../../components/MuiDialogEdit';
+import { useEffect } from 'react';
 
-export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
+export const ModalEditCompany = ({ openModalEdit, handleCloseModalEdit, dataEdit }) => {
     
     const { com_nit, com_dv, com_telefono, com_name, com_direccion, com_correo, com_representante, formState, onInputChange, setformState } = useForm({
-        com_nit: '',
-        com_dv: '',
-        com_telefono: '',
-        com_name: '',
-        com_direccion: '',
-        com_correo: '',
-        com_representante: '',
+        com_nit: dataEdit?.com_nit || '', // Asegúrate de usar un valor por defecto
+        com_dv: dataEdit?.com_dv || '',
+        com_telefono: dataEdit?.com_telefono || '',
+        com_name: dataEdit?.com_name || '',
+        com_direccion: dataEdit?.com_direccion || '',
+        com_correo: dataEdit?.com_correo || '',
+        com_representante: dataEdit?.com_representante || '',
 
     });
 
@@ -20,20 +21,19 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
      * Funcion principal para controlar el envio del formulario
      * @param {*} event 
      */
-    const hadleSubmit = (event) => {
+    const hadleSubmitEdit = (event) => {
 
         event.preventDefault();
 
-        registerCompany(formState);
+        editCompany(formState);
     }
 
     /**
      * metodo que se encarga de realizar el insert en la base de datos
      * @param {*} formState 
      */
-    const registerCompany = async (formState) => {
+    const editCompany = async (formState) => {
 
-        console.log(formState);
         setformState({
             com_nit: '',
             com_dv: '',
@@ -46,16 +46,38 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
         });
     }
 
+    /**
+     * Funcion encargada de asignar a las cajas de texto llos valores correpondientes a 
+     * los registros a editar
+     */
+    useEffect(() => {
+        
+        if(dataEdit) {
+
+            setformState({
+                com_nit : dataEdit.com_nit,
+                com_dv: dataEdit.com_dv,
+                com_telefono: dataEdit.com_telefono,
+                com_name: dataEdit.com_name,
+                com_direccion: dataEdit.com_direccion,
+                com_correo: dataEdit.com_correo,
+                com_representante: dataEdit.com_representante,
+        
+            });
+        }   
+    
+    }, [dataEdit]);    
+
     return (
         <>
 
-            <MuiDialogCreate openModal={openModal}
-                handleCloseModalCreate={handleCloseModalCreate}
-                hadleSubmit={hadleSubmit}
-                title={'Registro de Empresa'} >
+            <MuiDialogEdit openModalEdit={openModalEdit}
+                handleCloseModalEdit={handleCloseModalEdit}
+                hadleSubmitEdit={hadleSubmitEdit}
+                title={'Editar Empresa'} >
 
                 <Box component='form'
-                    onSubmit={hadleSubmit}>
+                    onSubmit={hadleSubmitEdit}>
                     <Grid container spacing={2} sx={{ mt: 2 }}>
                         <Grid size={{ xs: 12, sm: 12, md: 6, lg: 6, xl: 4 }}>
                             <TextField
@@ -63,7 +85,7 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                                 placeholder='Ingrese el numero de nit'
                                 fullWidth
                                 name='com_nit'
-                                required
+                                disabled
                                 value={com_nit}
                                 onChange={onInputChange}
                             />
@@ -137,7 +159,7 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                         </Grid>
                     </Grid>
                 </Box>
-            </MuiDialogCreate>
+            </MuiDialogEdit>
         </>
     )
 }
