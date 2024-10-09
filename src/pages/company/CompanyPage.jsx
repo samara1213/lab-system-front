@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ModalCreateCompany } from './ModalCreateCompany'
 import { Box, Button, IconButton, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -8,12 +8,14 @@ import { MuiTableBasic } from '../../components/MuiTableBasic';
 import { MuiTitlePage } from '../../components/MuiTitlePage';
 import { MuiPaperPage } from '../../components/MuiPaperPage';
 import { ModalEditCompany } from './ModalEditCompany';
+import { getAllCompaniesDB } from '../../services';
 
 export const CompanyPage = () => {
 
   const [onOpenModalCreateCompany, setOnOpenModalCreateCompany] = useState(false);
   const [onOpenModalEditCompany, setOnOpenModalEditCompany] = useState(false);
   const [dataEdit, setDataEdit] = useState(null);
+  const [arrayCompanies, setArrayCompanies] = useState([]);
 
   /**
    * funcion que se encarga de cerrar el modal de crear empresas
@@ -61,6 +63,10 @@ export const CompanyPage = () => {
 
   };
 
+  /**
+   * funcion que se encarga de inactivar las empresas
+   * @param {*} rowData 
+   */
   const inactiveCompany = (rowData) => {
 
     console.log(rowData)
@@ -69,21 +75,55 @@ export const CompanyPage = () => {
   };
 
 
+  /**
+   * funcion que se encarga de obtener el listado de empresas de la base de datos
+   */
+  const getAllCompanies = async () => {
 
+    try {  
 
-  // Definir los datos de las filas
-  const rows = [
-    { id: 1, com_nit: 'Nit 1', com_estado: 'ACTIVO', com_dv: '1', com_name: 'Nombre 1', com_telefono: '123',  com_direccion: 'valle', com_correo: 'correo1', com_representante: 'francisco'},
-    { id: 2, com_nit: 'Nit 2', com_estado: 'ACTIVO', com_dv: '2', com_name: 'Nombre 2', com_telefono: '5678', com_direccion: 'san gil', com_correo: 'correo2', com_representante: 'antonio'},
-    { id: 3, com_nit: 'Nit 3', com_estado: 'ACTIVO', com_dv: '3', com_name: 'Nombre 3', com_telefono: '9876', com_direccion: 'socorro', com_correo: 'correo3', com_representante: 'diaz'},
-    // Más registros si lo deseas
-  ];
+      // se obtiene los resultados de la base de datos
+      const { data } = await getAllCompaniesDB();
 
-  
+      // se crea un nuevo arreglo con la informacion de la base de datos
+      const  updateDate = data.map(item => {
+
+        // se desectrura los datos del item para cambier el nombre de la propiedad com_id por id
+        const { com_id, ...rest } = item;
+
+        // se regersa el objecto con el nuevo nombre de columna
+        return { id: com_id, 
+                  ...rest };
+
+      });
+
+      // se agrega el listado a la variable de estado para pintar la tabla
+      setArrayCompanies(updateDate);
+      
+    } catch (error) {
+       
+      console.log("**** ERROR CONSULTANDO EMPRESAS ****")
+      console.error(error)
+      console.log("**** FIN ERROR CONSULTANDO EMPRESAS ****")
+      
+    }
+  };
+
+  /**
+   * funcion que se encarga de realizar el llamado a la base de datos apenas sse pinte el
+   * componenete por primera vez
+   */
+  useEffect(() => {
+    
+    // se llama la funcionque obtiene la empresas
+    getAllCompanies();
+
+  }, []);
+
   // Definir las columnas
   const columns = [
     { field: 'com_nit', headerName: 'Nit Empresa', flex: 1 },
-    { field: 'com_name', headerName: 'Nombre Empresa', flex: 1 },
+    { field: 'com_nombre', headerName: 'Nombre Empresa', flex: 1 },
     { field: 'com_direccion', headerName: 'Direccion Empresa', flex: 1 },
     { field: 'com_correo', headerName: 'Correo Empresa', flex: 1 },
     { field: 'com_telefono', headerName: 'Telefono Empresa', flex: 1 },
@@ -105,7 +145,7 @@ export const CompanyPage = () => {
       flex: 0.5,
     },
   ];
-   
+
   return (
     <>
       <MuiTitlePage title={'Administraciòn empresas'} />
@@ -114,7 +154,7 @@ export const CompanyPage = () => {
         <Button sx={{ backgroundColor: 'tertiary.main' }} variant='contained' onClick={handleOnOpenModalCreateCompany}>
           <Typography>Crear empresa</Typography>
         </Button>
-        <MuiTableBasic rows={rows} columns={columns} />
+        <MuiTableBasic rows={arrayCompanies} columns={columns} />
       </MuiPaperPage>
       <ModalEditCompany openModalEdit={onOpenModalEditCompany} handleCloseModalEdit={handleOnCloseModalEditCompany} dataEdit={dataEdit} />
     </>

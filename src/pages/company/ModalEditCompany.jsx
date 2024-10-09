@@ -6,14 +6,14 @@ import { useEffect } from 'react';
 
 export const ModalEditCompany = ({ openModalEdit, handleCloseModalEdit, dataEdit }) => {
     
-    const { com_nit, com_dv, com_telefono, com_name, com_direccion, com_correo, com_representante, formState, onInputChange, setformState } = useForm({
+    const { com_nit, com_dv, com_telefono, com_nombre, com_direccion, com_correo, com_representante_legal, formState, onInputChange, setformState } = useForm({
         com_nit: dataEdit?.com_nit || '', // Asegúrate de usar un valor por defecto
         com_dv: dataEdit?.com_dv || '',
         com_telefono: dataEdit?.com_telefono || '',
-        com_name: dataEdit?.com_name || '',
+        com_nombre: dataEdit?.com_nombre || '',
         com_direccion: dataEdit?.com_direccion || '',
         com_correo: dataEdit?.com_correo || '',
-        com_representante: dataEdit?.com_representante || '',
+        com_representante_legal: dataEdit?.com_representante_legal || '',
 
     });
 
@@ -38,10 +38,10 @@ export const ModalEditCompany = ({ openModalEdit, handleCloseModalEdit, dataEdit
             com_nit: '',
             com_dv: '',
             com_telefono: '',
-            com_name: '',
+            com_nombre: '',
             com_direccion: '',
             com_correo: '',
-            com_representante: '',
+            com_representante_legal: '',
 
         });
     }
@@ -56,12 +56,12 @@ export const ModalEditCompany = ({ openModalEdit, handleCloseModalEdit, dataEdit
 
             setformState({
                 com_nit : dataEdit.com_nit,
-                com_dv: dataEdit.com_dv,
+                com_dv: null !== dataEdit.com_dv ? dataEdit.com_dv : '',
                 com_telefono: dataEdit.com_telefono,
-                com_name: dataEdit.com_name,
+                com_nombre: dataEdit.com_nombre,
                 com_direccion: dataEdit.com_direccion,
                 com_correo: dataEdit.com_correo,
-                com_representante: dataEdit.com_representante,
+                com_representante_legal: dataEdit.com_representante_legal,
         
             });
         }   
@@ -116,9 +116,9 @@ export const ModalEditCompany = ({ openModalEdit, handleCloseModalEdit, dataEdit
                             <TextField
                                 label='Nombre de la Empresa'
                                 fullWidth
-                                name='com_name'
+                                name='com_nombre'
                                 required
-                                value={com_name}
+                                value={com_nombre}
                                 placeholder='Ingrese nombre de la empresa'
                                 onChange={onInputChange}
                             />
@@ -150,9 +150,9 @@ export const ModalEditCompany = ({ openModalEdit, handleCloseModalEdit, dataEdit
                             <TextField
                                 label='Representante legal'
                                 fullWidth
-                                name='com_representante'
+                                name='com_representante_legal'
                                 required
-                                value={com_representante}
+                                value={com_representante_legal}
                                 placeholder='Ingrese representante de la empresa'
                                 onChange={onInputChange}
                             />

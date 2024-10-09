@@ -22,7 +22,7 @@ export const App = () => {
   return (
     <>
       {
-        (autenticaded === 'no-autenticaded') ?
+        (autenticaded === 'autenticaded') ?
           (
             <>
               <NavBar />
