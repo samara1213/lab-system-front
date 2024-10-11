@@ -1,4 +1,4 @@
-export { getAllCompaniesDB } from './companySerice';
+export { getAllCompaniesDB, storeCompanyDB } from './companySerice';
 export { loginUserDB, refreshToken } from './authService';
 
 
