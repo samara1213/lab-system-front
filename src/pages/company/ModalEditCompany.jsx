@@ -3,6 +3,8 @@ import Grid from '@mui/material/Grid2';
 import { useForm } from '../../hooks';
 import { MuiDialogEdit } from '../../components/MuiDialogEdit';
 import { useEffect } from 'react';
+import { updateCompanyDB } from '../../services';
+import Swal from 'sweetalert2';
 
 export const ModalEditCompany = ({ openModalEdit, handleCloseModalEdit, dataEdit }) => {
     
@@ -34,16 +36,42 @@ export const ModalEditCompany = ({ openModalEdit, handleCloseModalEdit, dataEdit
      */
     const editCompany = async (formState) => {
 
-        setformState({
-            com_nit: '',
-            com_dv: '',
-            com_telefono: '',
-            com_nombre: '',
-            com_direccion: '',
-            com_correo: '',
-            com_representante_legal: '',
+        try {
 
-        });
+            // preparamos la data a guardar
+            const tmpData = {
+                com_nit: formState.com_nit,
+                com_dv: formState.com_dv,
+                com_telefono: formState.com_telefono,
+                com_nombre: formState.com_nombre,
+                com_direccion: formState.com_direccion,
+                com_correo: formState.com_correo,
+                com_representante_legal: formState.com_representante_legal,
+            };
+
+            // se realiz ala actualizacion
+            const { data } = await updateCompanyDB(dataEdit.id, tmpData);
+
+            // cerramos el modal
+            handleCloseModalEdit();
+
+            // mensaje de notificacion
+            Swal.fire({
+                title: 'Actualizar empresa',
+                text: data.message,
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+                })
+
+
+            
+        } catch (error) {
+
+            console.log("**** ERROR EDITANDO EMPRESAS ****");
+            console.error(error);
+            console.log("**** FIN EDITANDO EMPRESAS ****");
+            
+        }
     }
 
     /**

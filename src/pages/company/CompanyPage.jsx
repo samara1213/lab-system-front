@@ -8,7 +8,8 @@ import { MuiTableBasic } from '../../components/MuiTableBasic';
 import { MuiTitlePage } from '../../components/MuiTitlePage';
 import { MuiPaperPage } from '../../components/MuiPaperPage';
 import { ModalEditCompany } from './ModalEditCompany';
-import { getAllCompaniesDB } from '../../services';
+import { getAllCompaniesDB, inactiveCompanyDB } from '../../services';
+import Swal from 'sweetalert2';
 
 export const CompanyPage = () => {
 
@@ -67,10 +68,27 @@ export const CompanyPage = () => {
    * funcion que se encarga de inactivar las empresas
    * @param {*} rowData 
    */
-  const inactiveCompany = (rowData) => {
+  const inactiveCompany = async (rowData) => {
 
-    console.log(rowData)
+    try {
 
+      const { data } = await inactiveCompanyDB(rowData.id);
+
+      // mensaje de notificacion
+      Swal.fire({
+        title: 'Inactivar empresa',
+        text: data.message,
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+      })    
+      
+    } catch (error) {
+
+      console.log("**** ERROR INACTIVANDO EMPRESAS ****")
+      console.error(error)
+      console.log("**** FIN ERROR INACTIVANDO EMPRESAS ****")
+      
+    }
 
   };
 
@@ -108,6 +126,7 @@ export const CompanyPage = () => {
       
     }
   };
+
 
   /**
    * funcion que se encarga de realizar el llamado a la base de datos apenas sse pinte el

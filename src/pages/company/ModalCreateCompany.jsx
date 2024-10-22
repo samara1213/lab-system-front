@@ -4,7 +4,7 @@ import { useForm } from '../../hooks';
 import { MuiDialogCreate } from '../../components/MuiDialogCreate';
 import { useState } from 'react';
 import { storeCompanyDB } from '../../services';
-import { MuiNotificationSuccess } from '../../components/MuiNotificationSuccess';
+import Swal from 'sweetalert2';
 
 export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
 
@@ -32,8 +32,6 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
         setformState } = useForm(initObject);
 
     const [selectedEstado, setSelectedEstado] = useState('ACTIVO');
-    const [openNotificationSuccess, setOpenNotificationSuccess] = useState(false)
-    const [messageNotification, setMessageNotification] = useState('')
     const [onError, setOnError] = useState({
         openAlert: false,
         errorMessage: '',
@@ -77,11 +75,16 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
 
             const { data } = await storeCompanyDB(objCompany);
 
-            // se aggrega el mensaje 
-            setMessageNotification(data.message);
+            // cierro el modal
+            handleCloseModalCreate()
 
-            // se abre la notificacion de correcto
-            setOpenNotificationSuccess(true);
+            // mensaje de notificacion
+            Swal.fire({
+                title: 'Guardar empresa',
+                text: data.message,
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+              })
 
             // se limpian las cajas
             setformState(initObject)
@@ -99,32 +102,6 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
         }
 
     }
-
-    /**
-     * Funcion que se encarga de cerrar la notificacion de success
-     * @param {*} event 
-     * @param {*} reason 
-     */
-    const handleCloseNotificationSuccess = (event, reason) => {
-
-        if (ValidateCloseModal(reason)) {
-
-            // cerramos la notificacion
-            setOpenNotificationSuccess(false);
-
-            //  cerramos el modal padre
-            handleCloseModalCreate()
-        }
-
-    }
-
-    /**
-   * Funcion que se encarga de validar cuando un moddal esta abirto si se pica fuera de el
-   * o si se oorime la tecla escape
-   * @param {*} reason 
-   * @returns 
-   */
-    const ValidateCloseModal = (reason) => (reason !== 'backdropClick' && reason !== 'escapeKeyDown');
 
     return (
         <>
@@ -234,10 +211,7 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                         </Grid>
                     </Grid>
                 </Box>
-            </MuiDialogCreate>
-            <MuiNotificationSuccess openNotification={openNotificationSuccess}
-                handleCloseNotification={handleCloseNotificationSuccess}
-                message={messageNotification} />
+            </MuiDialogCreate>    
         </>
     )
 }
