@@ -99,10 +99,10 @@ export const NavBar = () => {
                         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                     >
                         <MenuItem onClick={handleClose}>
-                            <Avatar><CorporateFare /></Avatar> {/**userInfo.company.com_nombre*/}
+                            <Avatar sx={{ bgcolor: '#673ab7' }}><CorporateFare /></Avatar> {/**userInfo.company.com_nombre*/}
                         </MenuItem>
                         <MenuItem onClick={handleClose}>
-                            <Avatar /> {/**userInfo.use_correo*/}
+                            <Avatar sx={{ bgcolor: '#673ab7' }} /> {/**userInfo.use_correo*/}
                         </MenuItem>
                         <Divider />
                         <MenuItem onClick={handleClose}>

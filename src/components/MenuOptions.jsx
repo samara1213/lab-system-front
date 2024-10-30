@@ -22,6 +22,12 @@ const arrayMenu = [
     path: '/companies',
     icon: <GroupIcon />
 
+  },
+  {
+    title: 'Clientes',
+    path: '/customers',
+    icon: <GroupIcon />
+
   }
 ]
 
