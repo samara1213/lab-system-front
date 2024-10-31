@@ -6,6 +6,7 @@ import { useUserStore } from "../../hooks/useUserStore"
 import { getCustomersByCompanyDB } from "../../services"
 import { useEffect, useState } from "react"
 import EditIcon from '@mui/icons-material/Edit';
+import { ModalCreateCustomer } from "./ModalCreateCustomer"
 
 
 export const CustomerPage = () => {
@@ -14,15 +15,26 @@ export const CustomerPage = () => {
     const { userInfo } = useUserStore();
 
     const [arrayCustomers, setArrayCustomers] = useState([]);
+    const [onOpenModalCreate, setOnOpenModalCreate] = useState(false);
     
     /**
      * funcion que se encarga de abrir el modal de crear un nuevo cliente
      */
     const handleOnOpenModalCreateCustomer = () => {
 
-        console.log('1111')
+        setOnOpenModalCreate(true);
 
     }
+
+      /**
+   * funcion que se encarga de cerrar el modal de crear empresas
+   */
+  const handleOnCloseModalCreate = (event, reason) => {
+
+    // se valida que no se hubierad dado click fuera del modal o presiodado la tecla esc
+    if (ValidateCloseModal(reason))  setOnOpenModalCreate(false)
+    
+  };
 
     /**
      * Funcion que se encarga de abrir el modal de editra  clientes
@@ -121,6 +133,7 @@ export const CustomerPage = () => {
                 <Typography>Crear Cliente</Typography>
                 </Button>
                 <MuiTableBasic rows={arrayCustomers} columns={columns} />
+                <ModalCreateCustomer openModal={onOpenModalCreate} handleCloseModalCreate={handleOnCloseModalCreate} />
             </MuiPaperPage>
         </>
     )
