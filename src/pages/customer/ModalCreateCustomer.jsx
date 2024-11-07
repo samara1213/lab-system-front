@@ -1,11 +1,13 @@
 import { Box, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material"
 import { MuiDialogCreate } from "../../components/MuiDialogCreate"
 import Grid from '@mui/material/Grid2';
-import { useState } from "react";
-import { useForm } from "../../hooks";
+import { useState } from 'react';
+import { useForm } from '../../hooks';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate }) => {
-    
+
     // objecto inical con los nombres de las columnas
     const initObject = {
         cus_numero_doc: '',
@@ -14,6 +16,10 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate }) => {
         cus_primer_nombre: '',
         cus_segundo_nombre: '',
         cus_direccion: '',
+        cus_fecha_nacimiento: '',
+        cus_telefono: '',
+        cus_correo: '',
+        cus_companie: ''
     };
 
     const { cus_numero_doc,
@@ -22,12 +28,17 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate }) => {
         cus_primer_nombre,
         cus_segundo_nombre,
         cus_direccion,
+        cus_fecha_nacimiento,
+        cus_telefono,
+        cus_correo,
+        cus_companie,
         formState,
         onInputChange,
         setformState } = useForm(initObject);
 
     const [selectTypeDoc, setSelectTypeDoc] = useState('CC');
-    const [selectGenero, setSelectGenero] = useState('M')
+    const [selectGenero, setSelectGenero] = useState('M');
+    const [selectedDate, setSelectedDate] = useState(null);
 
     const handleChange = (event) => {
 
@@ -51,7 +62,7 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate }) => {
             >
                 <Box component='form'>
                     <Grid container spacing={2} sx={{ mt: 2 }}>
-                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4}}>
+                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                             <FormControl fullWidth>
                                 <InputLabel id="select-type-doc">Tipo de documento</InputLabel>
                                 <Select
@@ -68,7 +79,7 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate }) => {
                             </FormControl>
 
                         </Grid>
-                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4}}>
+                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                             <TextField
                                 label='Numero Documento'
                                 placeholder='Documento de identidad'
@@ -80,7 +91,7 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate }) => {
                             />
 
                         </Grid>
-                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4}}>
+                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                             <TextField
                                 label='Primer Apellido'
                                 placeholder='Primer apellido'
@@ -92,18 +103,18 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate }) => {
                             />
 
                         </Grid>
-                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4}}>
+                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                             <TextField
                                 label='Segundo Apellido'
                                 placeholder='Segundo apellido'
                                 fullWidth
-                                name='cus_segundo_apellido'                        
+                                name='cus_segundo_apellido'
                                 value={cus_segundo_apellido}
                                 onChange={onInputChange}
                             />
 
                         </Grid>
-                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4}}>
+                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                             <TextField
                                 label='Primer Nombre'
                                 placeholder='Primer Nombre'
@@ -115,30 +126,30 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate }) => {
                             />
 
                         </Grid>
-                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4}}>
+                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                             <TextField
                                 label='Segundo Nombre'
                                 placeholder='Segundo Nombre'
                                 fullWidth
-                                name='cus_segundo_nombre'                                
+                                name='cus_segundo_nombre'
                                 value={cus_segundo_nombre}
                                 onChange={onInputChange}
                             />
 
                         </Grid>
-                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4}}>
+                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                             <TextField
                                 label='Direccion'
                                 placeholder='Direccion'
                                 fullWidth
                                 name='cus_direccion'
-                                required                                
+                                required
                                 value={cus_direccion}
                                 onChange={onInputChange}
                             />
 
                         </Grid>
-                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4}}>
+                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                             <FormControl fullWidth>
                                 <InputLabel id="select-genero">Genero</InputLabel>
                                 <Select
@@ -149,10 +160,24 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate }) => {
                                 >
                                     <MenuItem value='M'>Masculino</MenuItem>
                                     <MenuItem value='F'>Femenino</MenuItem>
-                                    <MenuItem value='O'>Otro</MenuItem>                                  
+                                    <MenuItem value='O'>Otro</MenuItem>
                                 </Select>
                             </FormControl>
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker
+                                    label="Selecciona una fecha"
+                                    value={selectedDate}
+                                    onChange={(newDate) => setSelectedDate(newDate)}
+                                    slotProps={{
+                                        textField: {
+                                            fullWidth: true,
+                                        },
+                                    }}
 
+                                />
+                            </LocalizationProvider>
                         </Grid>
                     </Grid>
                 </Box>
