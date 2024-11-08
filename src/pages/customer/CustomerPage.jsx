@@ -133,7 +133,9 @@ export const CustomerPage = () => {
                 <Typography>Crear Cliente</Typography>
                 </Button>
                 <MuiTableBasic rows={arrayCustomers} columns={columns} />
-                <ModalCreateCustomer openModal={onOpenModalCreate} handleCloseModalCreate={handleOnCloseModalCreate} />
+                <ModalCreateCustomer openModal={onOpenModalCreate} 
+                                     handleCloseModalCreate={handleOnCloseModalCreate}
+                                     reloadTable={getCustomersByCompany}/>
             </MuiPaperPage>
         </>
     )
