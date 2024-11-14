@@ -7,6 +7,7 @@ import { getCustomersByCompanyDB } from "../../services"
 import { useEffect, useState } from "react"
 import EditIcon from '@mui/icons-material/Edit';
 import { ModalCreateCustomer } from "./ModalCreateCustomer"
+import { ModalEditCustomer } from "./ModalEditCustomer"
 
 
 export const CustomerPage = () => {
@@ -16,6 +17,8 @@ export const CustomerPage = () => {
 
     const [arrayCustomers, setArrayCustomers] = useState([]);
     const [onOpenModalCreate, setOnOpenModalCreate] = useState(false);
+    const [onOpenModalEdit, setOnOpenModalEdit] = useState(false);
+    const [dataEdit, setDataEdit] = useState(null);
     
     /**
      * funcion que se encarga de abrir el modal de crear un nuevo cliente
@@ -26,7 +29,7 @@ export const CustomerPage = () => {
 
     }
 
-      /**
+  /**
    * funcion que se encarga de cerrar el modal de crear empresas
    */
   const handleOnCloseModalCreate = (event, reason) => {
@@ -36,12 +39,25 @@ export const CustomerPage = () => {
     
   };
 
+
+  /**
+   * funcion que se encarga de cerrar el modal de crear empresas
+   */
+  const handleOnCloseModalEdit = (event, reason) => {
+
+    // se valida que no se hubierad dado click fuera del modal o presiodado la tecla esc
+    if (ValidateCloseModal(reason))  setOnOpenModalEdit(false)
+    
+  };
+
     /**
      * Funcion que se encarga de abrir el modal de editra  clientes
      * @param {*} rowData   datos del cliente a editar
      */
     const handleOnOpenModalEditCustomer = (rowData) => {
-        console.log(rowData)
+        
+        setDataEdit(rowData);
+        setOnOpenModalEdit(true);
     }
 
 
@@ -136,6 +152,9 @@ export const CustomerPage = () => {
                 <ModalCreateCustomer openModal={onOpenModalCreate} 
                                      handleCloseModalCreate={handleOnCloseModalCreate}
                                      reloadTable={getCustomersByCompany}/>
+                <ModalEditCustomer openModalEdit={onOpenModalEdit}
+                                   handleCloseModalEdit={handleOnCloseModalEdit}
+                                   dataEdit={dataEdit}/>
             </MuiPaperPage>
         </>
     )
