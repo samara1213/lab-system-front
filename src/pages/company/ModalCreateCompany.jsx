@@ -6,6 +6,15 @@ import { useState } from 'react';
 import { storeCompanyDB } from '../../services';
 import Swal from 'sweetalert2';
 
+const formValidations = {
+    com_correo: [ (value) => value.includes('@'), 'El correo no es valido'],
+    com_nit: [ (value) => value.length >= 1, 'El numero de nit es obligatorio'],
+    com_telefono: [ (value) => value.length >= 1, 'El numero de telefono es obligatorio'],
+    com_nombre: [ (value) => value.length >= 1, 'El nombre es obligatorio'],
+    com_direccion: [ (value) => value.length >= 1, 'La direccion es obligatoria'],
+    com_representante_legal: [ (value) => value.length >= 1, 'El representante es obligatorio'],
+  }
+
 export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
 
     // objecto inical con los nombres de las columnas
@@ -29,13 +38,21 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
         com_representante_legal,
         formState,
         onInputChange,
-        setformState } = useForm(initObject);
+        isFormValid,
+        com_correoValid,
+        com_nitValid,
+        com_telefonoValid,
+        com_nombreValid,
+        com_direccionValid,
+        com_representante_legalValid,
+        setformState } = useForm(initObject, formValidations);
 
     const [selectedEstado, setSelectedEstado] = useState('ACTIVO');
     const [onError, setOnError] = useState({
         openAlert: false,
         errorMessage: '',
     });
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
     const handleChange = (event) => {
 
@@ -50,6 +67,10 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
     const hadleSubmit = (event) => {
 
         event.preventDefault();
+        setFormSubmitted(true);
+     
+        // validamos si el formulario es valido si no etonces no hacemos nada
+        if ( !isFormValid ) return;
 
         setOnError({
             openAlert: false,
@@ -125,6 +146,8 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                                 name='com_nit'
                                 required
                                 value={com_nit}
+                                error={ !!com_nitValid && formSubmitted}
+                                helperText={ !isFormValid ? com_nitValid: '' }
                                 onChange={onInputChange}
                             />
                         </Grid>
@@ -147,6 +170,8 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                                 required
                                 value={com_telefono}
                                 placeholder='Ingrese numero de telefono'
+                                error={ !!com_telefonoValid && formSubmitted}
+                                helperText={ !isFormValid ? com_telefonoValid: '' }
                                 onChange={onInputChange}
                             />
                         </Grid>
@@ -158,6 +183,8 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                                 required
                                 value={com_nombre}
                                 placeholder='Ingrese nombre de la empresa'
+                                error={ !!com_nombreValid && formSubmitted}
+                                helperText={ !isFormValid ? com_nombreValid: '' }
                                 onChange={onInputChange}
                             />
                         </Grid>
@@ -169,6 +196,8 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                                 required
                                 value={com_direccion}
                                 placeholder='Ingrese direccion de la empresa'
+                                error={ !!com_direccionValid && formSubmitted}
+                                helperText={ !isFormValid ? com_direccionValid: '' }
                                 onChange={onInputChange}
                             />
                         </Grid>
@@ -181,6 +210,8 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                                 type='email'
                                 value={com_correo}
                                 placeholder='Ingrese correo de la empresa'
+                                error={ !!com_correoValid && formSubmitted}
+                                helperText={ !isFormValid ? com_correoValid: '' }
                                 onChange={onInputChange}
                             />
                         </Grid>
@@ -192,6 +223,8 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                                 required
                                 value={com_representante_legal}
                                 placeholder='Ingrese representante de la empresa'
+                                error={ !!com_representante_legalValid && formSubmitted}
+                                helperText={ !isFormValid ? com_representante_legalValid: '' }
                                 onChange={onInputChange}
                             />
                         </Grid>
