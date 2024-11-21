@@ -9,6 +9,15 @@ import { useForm } from '../../hooks';
 import { updateCustomerDB } from '../../services';
 import Swal from 'sweetalert2';
 
+const formValidations = {
+  cus_numero_doc: [(value) => value.length >= 1, 'El numero de documento no es valido'],
+  cus_primer_apellido: [(value) => value.length >= 1, 'El Primer apellido es obligatorio'],
+  cus_primer_nombre: [(value) => value.length >= 1, 'El Primer nombre es obligatorio'],
+  cus_direccion: [(value) => value.length >= 1, 'La direccion es obligatoria'],
+  cus_telefono: [(value) => value.length >= 1, 'el Telefono es obligatorio'],
+  cus_correo: [(value) => value.includes('@'), 'El correo no es valido'],
+}
+
 export const ModalEditCustomer = ({ openModalEdit, handleCloseModalEdit, dataEdit }) => {
 
   // objecto inical con los nombres de las columnas
@@ -33,7 +42,14 @@ export const ModalEditCustomer = ({ openModalEdit, handleCloseModalEdit, dataEdi
     cus_correo,
     formState,
     onInputChange,
-    setformState } = useForm({
+    setformState,
+    isFormValid,
+    cus_numero_docValid,
+    cus_primer_apellidoValid,
+    cus_primer_nombreValid,
+    cus_direccionValid,
+    cus_telefonoValid,
+    cus_correoValid } = useForm({
       cus_numero_doc: dataEdit?.cus_numero_doc || '',
       cus_primer_apellido: dataEdit?.cus_primer_apellido || '',
       cus_segundo_apellido: dataEdit?.cus_segundo_apellido || '',
@@ -43,7 +59,7 @@ export const ModalEditCustomer = ({ openModalEdit, handleCloseModalEdit, dataEdi
       cus_telefono: dataEdit?.cus_telefono || '',
       cus_correo: dataEdit?.cus_correo || '',
 
-    });
+    }, formValidations);
 
   // inicio de los useSates
   const [selectTypeDoc, setSelectTypeDoc] = useState('');
@@ -53,6 +69,7 @@ export const ModalEditCustomer = ({ openModalEdit, handleCloseModalEdit, dataEdi
     openAlert: false,
     errorMessage: '',
   });
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   /**
    * funcion que se encarga de obtner el control cuando
@@ -110,6 +127,9 @@ export const ModalEditCustomer = ({ openModalEdit, handleCloseModalEdit, dataEdi
   const hadleSubmitEdit = (event) => {
 
     event.preventDefault();
+    setFormSubmitted(true);
+    // validamos si el formulario es valido de lo contrario no permitimos continuar
+    if (!isFormValid) return;
 
     // se limipia el mensaje de errro
     setOnError({
@@ -270,6 +290,8 @@ export const ModalEditCustomer = ({ openModalEdit, handleCloseModalEdit, dataEdi
                 required
                 value={cus_numero_doc}
                 onChange={onInputChange}
+                error={!!cus_numero_docValid && formSubmitted}
+                helperText={!!cus_numero_docValid && formSubmitted ? cus_numero_docValid : ''}
                 disabled
               />
 
@@ -282,6 +304,8 @@ export const ModalEditCustomer = ({ openModalEdit, handleCloseModalEdit, dataEdi
                 name='cus_primer_apellido'
                 required
                 value={cus_primer_apellido}
+                error={!!cus_primer_apellidoValid && formSubmitted}
+                helperText={!!cus_primer_apellidoValid && formSubmitted ? cus_primer_apellidoValid : ''}
                 onChange={onInputChange}
               />
 
@@ -305,6 +329,8 @@ export const ModalEditCustomer = ({ openModalEdit, handleCloseModalEdit, dataEdi
                 name='cus_primer_nombre'
                 required
                 value={cus_primer_nombre}
+                error={!!cus_primer_nombreValid && formSubmitted}
+                helperText={!!cus_primer_nombreValid && formSubmitted ? cus_primer_nombreValid : ''}
                 onChange={onInputChange}
               />
 
@@ -328,6 +354,8 @@ export const ModalEditCustomer = ({ openModalEdit, handleCloseModalEdit, dataEdi
                 name='cus_direccion'
                 required
                 value={cus_direccion}
+                error={!!cus_direccionValid && formSubmitted}
+                helperText={!!cus_direccionValid && formSubmitted ? cus_direccionValid : ''}
                 onChange={onInputChange}
               />
 
@@ -370,6 +398,8 @@ export const ModalEditCustomer = ({ openModalEdit, handleCloseModalEdit, dataEdi
                 name='cus_telefono'
                 required
                 value={cus_telefono}
+                error={!!cus_telefonoValid && formSubmitted}
+                helperText={!!cus_telefonoValid && formSubmitted ? cus_telefonoValid : ''}
                 onChange={onInputChange}
               />
 
@@ -382,6 +412,8 @@ export const ModalEditCustomer = ({ openModalEdit, handleCloseModalEdit, dataEdi
                 name='cus_correo'
                 required
                 value={cus_correo}
+                error={!!cus_correoValid && formSubmitted}
+                helperText={!!cus_correoValid && formSubmitted ? cus_correoValid : ''}
                 onChange={onInputChange}
                 type="email"
               />

@@ -10,7 +10,16 @@ import { useUserStore } from "../../hooks/useUserStore";
 import { storeCustomersByCompanyDB } from "../../services";
 import Swal from 'sweetalert2';
 
-export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate, reloadTable}) => {
+const formValidations = {
+    cus_numero_doc: [(value) => value.length >= 1, 'El numero de documento no es valido'],
+    cus_primer_apellido: [(value) => value.length >= 1, 'El Primer apellido es obligatorio'],
+    cus_primer_nombre: [(value) => value.length >= 1, 'El Primer nombre es obligatorio'],
+    cus_direccion: [(value) => value.length >= 1, 'La direccion es obligatoria'],
+    cus_telefono: [(value) => value.length >= 1, 'el Telefono es obligatorio'],
+    cus_correo: [(value) => value.includes('@'), 'El correo no es valido'],
+}
+
+export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate, reloadTable }) => {
 
     // consultamos los datos del usuario que estan guardados en redux
     const { userInfo } = useUserStore();
@@ -37,7 +46,15 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate, reloadT
         cus_correo,
         formState,
         onInputChange,
-        setformState } = useForm(initObject);
+        setformState,
+        isFormValid,
+        cus_numero_docValid,
+        cus_primer_apellidoValid,
+        cus_primer_nombreValid,
+        cus_direccionValid,
+        cus_telefonoValid,
+        cus_correoValid
+    } = useForm(initObject, formValidations);
 
     // inicio de los useSates
     const [selectTypeDoc, setSelectTypeDoc] = useState('CC');
@@ -47,6 +64,7 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate, reloadT
         openAlert: false,
         errorMessage: '',
     });
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
     /**
      * funcion que se encarga de obtner el control cuando
@@ -75,6 +93,9 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate, reloadT
     const hadleSubmit = (event) => {
 
         event.preventDefault();
+        setFormSubmitted(true);
+        // validamos si el formulario es valido de lo contrario no permitimos continuar
+        if (!isFormValid) return;
 
         // se limipia el mensaje de errro
         setOnError({
@@ -236,6 +257,8 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate, reloadT
                                 name='cus_numero_doc'
                                 required
                                 value={cus_numero_doc}
+                                error={!!cus_numero_docValid  && formSubmitted}
+                                helperText={!!cus_numero_docValid  && formSubmitted ? cus_numero_docValid : ''}
                                 onChange={onInputChange}
                             />
 
@@ -249,6 +272,8 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate, reloadT
                                 required
                                 value={cus_primer_apellido}
                                 onChange={onInputChange}
+                                error={!!cus_primer_apellidoValid  && formSubmitted}
+                                helperText={!!cus_primer_apellidoValid  && formSubmitted ? cus_primer_apellidoValid : ''}
                             />
 
                         </Grid>
@@ -272,6 +297,8 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate, reloadT
                                 required
                                 value={cus_primer_nombre}
                                 onChange={onInputChange}
+                                error={!!cus_primer_nombreValid  && formSubmitted}
+                                helperText={!!cus_primer_nombreValid  && formSubmitted ? cus_primer_nombreValid : ''}
                             />
 
                         </Grid>
@@ -295,6 +322,9 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate, reloadT
                                 required
                                 value={cus_direccion}
                                 onChange={onInputChange}
+                                error={!!cus_direccionValid  && formSubmitted}
+                                helperText={!!cus_direccionValid  && formSubmitted ? cus_direccionValid : ''}
+
                             />
 
                         </Grid>
@@ -337,6 +367,9 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate, reloadT
                                 required
                                 value={cus_telefono}
                                 onChange={onInputChange}
+                                error={!!cus_telefonoValid  && formSubmitted}
+                                helperText={!!cus_telefonoValid  && formSubmitted ? cus_telefonoValid : ''}
+
                             />
 
                         </Grid>
@@ -349,6 +382,8 @@ export const ModalCreateCustomer = ({ openModal, handleCloseModalCreate, reloadT
                                 required
                                 value={cus_correo}
                                 onChange={onInputChange}
+                                error={!!cus_correoValid  && formSubmitted}
+                                helperText={!!cus_correoValid  && formSubmitted ? cus_correoValid : ''}
                                 type="email"
                             />
 

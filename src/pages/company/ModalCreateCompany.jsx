@@ -147,7 +147,7 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                                 required
                                 value={com_nit}
                                 error={ !!com_nitValid && formSubmitted}
-                                helperText={ !isFormValid ? com_nitValid: '' }
+                                helperText={ !!com_nitValid && formSubmitted ? com_nitValid: '' }
                                 onChange={onInputChange}
                             />
                         </Grid>
@@ -171,7 +171,7 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                                 value={com_telefono}
                                 placeholder='Ingrese numero de telefono'
                                 error={ !!com_telefonoValid && formSubmitted}
-                                helperText={ !isFormValid ? com_telefonoValid: '' }
+                                helperText={ !!com_telefonoValid && formSubmitted ? com_telefonoValid: '' }
                                 onChange={onInputChange}
                             />
                         </Grid>
@@ -184,7 +184,7 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                                 value={com_nombre}
                                 placeholder='Ingrese nombre de la empresa'
                                 error={ !!com_nombreValid && formSubmitted}
-                                helperText={ !isFormValid ? com_nombreValid: '' }
+                                helperText={ !!com_nombreValid && formSubmitted ? com_nombreValid: '' }
                                 onChange={onInputChange}
                             />
                         </Grid>
@@ -197,7 +197,7 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                                 value={com_direccion}
                                 placeholder='Ingrese direccion de la empresa'
                                 error={ !!com_direccionValid && formSubmitted}
-                                helperText={ !isFormValid ? com_direccionValid: '' }
+                                helperText={ !!com_direccionValid && formSubmitted ? com_direccionValid: '' }
                                 onChange={onInputChange}
                             />
                         </Grid>
@@ -211,7 +211,7 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                                 value={com_correo}
                                 placeholder='Ingrese correo de la empresa'
                                 error={ !!com_correoValid && formSubmitted}
-                                helperText={ !isFormValid ? com_correoValid: '' }
+                                helperText={ !!com_correoValid && formSubmitted ? com_correoValid: '' }
                                 onChange={onInputChange}
                             />
                         </Grid>
@@ -224,7 +224,7 @@ export const ModalCreateCompany = ({ openModal, handleCloseModalCreate }) => {
                                 value={com_representante_legal}
                                 placeholder='Ingrese representante de la empresa'
                                 error={ !!com_representante_legalValid && formSubmitted}
-                                helperText={ !isFormValid ? com_representante_legalValid: '' }
+                                helperText={ !!com_representante_legalValid && formSubmitted ? com_representante_legalValid: '' }
                                 onChange={onInputChange}
                             />
                         </Grid>
