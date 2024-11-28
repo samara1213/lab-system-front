@@ -28,6 +28,12 @@ const arrayMenu = [
     path: '/customers',
     icon: <GroupIcon />
 
+  },
+  {
+    title: 'Tipos de examenes',
+    path: '/exams',
+    icon: <GroupIcon />
+
   }
 ]
 
