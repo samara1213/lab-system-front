@@ -6,11 +6,14 @@ import { getExamsByCompanyDB } from "../../services";
 import { MuiTableBasic } from "../../components/MuiTableBasic";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
+import { ModalCreateExam } from "./ModalCreateExam";
+import { ValidateCloseModal } from "../../helpers/utilities.";
 
 export const Exam = () => {
 
     const { userInfo } = useUserStore();
     const [arrayExams, setArrayExams] = useState([]);
+    const [openModalCreate, setOpenModalCreate] = useState(false)
 
     /**
    * Funcion que se encarga de abrir el modal de editra  clientes
@@ -21,6 +24,25 @@ export const Exam = () => {
         // setDataEdit(rowData);
         // setOnOpenModalEdit(true);
     }
+
+    /**
+     * funcion que se encarga de abrir el modal para registrar un nuevo 
+     * examen para la empresa
+     */
+    const handleOnOpenModalCreate = () => {
+
+        setOpenModalCreate(true);
+    }
+
+    /**
+    *funcion que se encarga de cerrar el modal de crear empresas
+    */
+    const handleOnCloseModalCreate = (event, reason) => {
+
+        // se valida que no se hubierad dado click fuera del modal o presiodado la tecla esc
+        if (ValidateCloseModal(reason))  setOpenModalCreate(false)
+        
+    };
 
     /**
      * funcion que se encarga de obtner el listado de exames de una empresa
@@ -81,6 +103,7 @@ export const Exam = () => {
         },
     ];
 
+    
 
     /**
      * funcion para cargar los datos de la empresa apenas se abra la pantalla
@@ -96,10 +119,14 @@ export const Exam = () => {
         <>
             <MuiTitlePage title={'Administraciòn tipos de examenes'} />
             <MuiPaperPage>
-                <Button sx={{ backgroundColor: 'tertiary.main' }} variant='contained'>
+                <Button sx={{ backgroundColor: 'tertiary.main' }} variant='contained' onClick={handleOnOpenModalCreate}>
                     <Typography>Crear tipo examen</Typography>
                 </Button>
                 <MuiTableBasic rows={arrayExams} columns={columns}/>
+                <ModalCreateExam openModal={openModalCreate}
+                                 handleCloseModalCreate={handleOnCloseModalCreate}
+                                 reloadTable={getExamsByCompany}
+                                 />
             </MuiPaperPage>
         </>
     )
