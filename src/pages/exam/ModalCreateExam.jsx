@@ -24,6 +24,7 @@ export const ModalCreateExam = ({ openModal, handleCloseModalCreate, reloadTable
             exa_name: '',
             exa_description: '',
             exa_convenius_name: '',
+            exa_price: 0,
         }
     });
 
@@ -35,13 +36,17 @@ export const ModalCreateExam = ({ openModal, handleCloseModalCreate, reloadTable
     const registerExam = async (data) => {
 
         const modalTitle = 'Crear Tipo de examen';
-
+             
         try {
 
             // realizamos  el registro en la base de datos
             const response = await storeExamenDB({
                 ...data,
-                exa_companie: isConvenio ? userInfo.company.com_id : '',
+                exa_companie: userInfo.company.com_id,
+                exa_convenius: isConvenio,
+                exa_convenius_name: isConvenio ? data.exa_convenius_name : '',
+                exa_price: +data.exa_price,
+
             })
 
             // mensaje de notificacion
@@ -147,16 +152,16 @@ export const ModalCreateExam = ({ openModal, handleCloseModalCreate, reloadTable
                                 placeholder='Ingrese un valor para el examen'
                                 fullWidth
                                 required
-                                type="Number"
-                                error={!!errors.exa_value}
-                                {...register('exa_value', {
+                                type='number'
+                                error={!!errors.exa_price}
+                                {...register('exa_price', {
                                     required: {
                                         value: true,
                                         message: 'El campo valor examen no puede estar vacio'
                                     }
                                 })}
                             />
-                            <MuiErrorValidateForm error={errors.exa_value} />
+                            <MuiErrorValidateForm error={errors.exa_price} />
                         </Grid>
                         <Grid size={{ xs: 12, sm: 12, md: 4, lg: 4, xl: 4 }}>
                             <Typography> Examen procesado con convenio ?:
