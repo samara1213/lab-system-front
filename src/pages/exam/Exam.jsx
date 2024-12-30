@@ -4,11 +4,15 @@ import { MuiTitlePage } from "../../components/MuiTitlePage"
 import { useUserStore } from "../../hooks/useUserStore"
 import { getExamsByCompanyDB } from "../../services";
 import { MuiTableBasic } from "../../components/MuiTableBasic";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { ModalCreateExam } from "./ModalCreateExam";
 import { ValidateCloseModal } from "../../helpers/utilities.";
 import { ModalEditExamen } from "./ModalEditExamen";
+import { useNavigate } from "react-router-dom";
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 export const Exam = () => {
 
@@ -17,13 +21,14 @@ export const Exam = () => {
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [onOpenModalEdit, setOnOpenModalEdit] = useState(false);
     const [dataEdit, setDataEdit] = useState(null);
+    const navigate = useNavigate();
 
     /**
    * Funcion que se encarga de abrir el modal de editra  clientes
    * @param {*} rowData   datos del cliente a editar
    */
     const handleOnOpenModalEditExam = (rowData) => {
-        
+
         setDataEdit(rowData);
         setOnOpenModalEdit(true);
     }
@@ -37,14 +42,25 @@ export const Exam = () => {
         setOpenModalCreate(true);
     }
 
+
+    /**
+     * funcion que se encarga de redirijir a la pagina de parametros para
+     * agregar uno o varios parametros al tipo de examen
+     */
+    const handleOnOpenAddParameters = (rowData) => {
+
+        // abrimos la pagina de parametros
+        return navigate(`/exam-parameters/${rowData.id}/${rowData.exa_name}`);
+    }
+
     /**
     *funcion que se encarga de cerrar el modal de crear empresas
     */
     const handleOnCloseModalCreate = (event, reason) => {
 
         // se valida que no se hubierad dado click fuera del modal o presiodado la tecla esc
-        if (ValidateCloseModal(reason))  setOpenModalCreate(false)
-        
+        if (ValidateCloseModal(reason)) setOpenModalCreate(false)
+
     };
 
     /**
@@ -53,8 +69,8 @@ export const Exam = () => {
     const handleOnCloseModalEdit = (event, reason) => {
 
         // se valida que no se hubierad dado click fuera del modal o presiodado la tecla esc
-        if (ValidateCloseModal(reason))  setOnOpenModalEdit(false)
-        
+        if (ValidateCloseModal(reason)) setOnOpenModalEdit(false)
+
     };
 
     /**
@@ -103,20 +119,27 @@ export const Exam = () => {
         { field: 'exa_price', headerName: 'Precio', flex: 1 },
         {
             field: 'actions',
-            headerName: 'Editar',
+            headerName: 'Acciones',
             sortable: false,
             renderCell: (params) => (
                 <Box>
-                    <IconButton sx={{ color: 'tertiary.main' }} onClick={() => handleOnOpenModalEditExam(params.row)} aria-label="edit">
-                        <EditIcon />
-                    </IconButton>
+                    <Tooltip title='Editar'>
+                        <IconButton sx={{ color: 'tertiary.main' }} onClick={() => handleOnOpenModalEditExam(params.row)} aria-label="edit">
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title='Parametros'>
+                        <IconButton sx={{ color: 'primary.main' }} onClick={() => handleOnOpenAddParameters(params.row)} aria-label="Agregar">
+                            <PostAddIcon />
+                        </IconButton>
+                    </Tooltip>
                 </Box>
             ),
             flex: 0.5,
         },
     ];
 
-    
+
 
     /**
      * funcion para cargar los datos de la empresa apenas se abra la pantalla
@@ -135,14 +158,14 @@ export const Exam = () => {
                 <Button sx={{ backgroundColor: 'tertiary.main' }} variant='contained' onClick={handleOnOpenModalCreate}>
                     <Typography>Crear tipo examen</Typography>
                 </Button>
-                <MuiTableBasic rows={arrayExams} columns={columns}/>
+                <MuiTableBasic rows={arrayExams} columns={columns} />
                 <ModalCreateExam openModal={openModalCreate}
-                                 handleCloseModalCreate={handleOnCloseModalCreate}
-                                 reloadTable={getExamsByCompany}
-                                 />
+                    handleCloseModalCreate={handleOnCloseModalCreate}
+                    reloadTable={getExamsByCompany}
+                />
                 <ModalEditExamen openModalEdit={onOpenModalEdit}
-                                 handleCloseModalEdit={handleOnCloseModalEdit}
-                                 dataEdit={dataEdit}/>
+                    handleCloseModalEdit={handleOnCloseModalEdit}
+                    dataEdit={dataEdit} />
             </MuiPaperPage>
         </>
     )

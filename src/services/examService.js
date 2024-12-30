@@ -14,3 +14,8 @@ export async function updateExamenDB(id, data) {
 
     return await laboratorioApi.patch(`exams/${ id }`, data);
 }
+
+export async function getExanenByIdDB(id) {
+
+    return await laboratorioApi.get(`exams/${ id }`);
+}
