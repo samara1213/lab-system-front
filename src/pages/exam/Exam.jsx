@@ -8,21 +8,24 @@ import { Box, Button, IconButton, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { ModalCreateExam } from "./ModalCreateExam";
 import { ValidateCloseModal } from "../../helpers/utilities.";
+import { ModalEditExamen } from "./ModalEditExamen";
 
 export const Exam = () => {
 
     const { userInfo } = useUserStore();
     const [arrayExams, setArrayExams] = useState([]);
-    const [openModalCreate, setOpenModalCreate] = useState(false)
+    const [openModalCreate, setOpenModalCreate] = useState(false);
+    const [onOpenModalEdit, setOnOpenModalEdit] = useState(false);
+    const [dataEdit, setDataEdit] = useState(null);
 
     /**
    * Funcion que se encarga de abrir el modal de editra  clientes
    * @param {*} rowData   datos del cliente a editar
    */
     const handleOnOpenModalEditExam = (rowData) => {
-        console.log('editar')
-        // setDataEdit(rowData);
-        // setOnOpenModalEdit(true);
+        
+        setDataEdit(rowData);
+        setOnOpenModalEdit(true);
     }
 
     /**
@@ -41,6 +44,16 @@ export const Exam = () => {
 
         // se valida que no se hubierad dado click fuera del modal o presiodado la tecla esc
         if (ValidateCloseModal(reason))  setOpenModalCreate(false)
+        
+    };
+
+    /**
+    *funcion que se encarga de cerrar el modal de crear empresas
+    */
+    const handleOnCloseModalEdit = (event, reason) => {
+
+        // se valida que no se hubierad dado click fuera del modal o presiodado la tecla esc
+        if (ValidateCloseModal(reason))  setOnOpenModalEdit(false)
         
     };
 
@@ -127,6 +140,9 @@ export const Exam = () => {
                                  handleCloseModalCreate={handleOnCloseModalCreate}
                                  reloadTable={getExamsByCompany}
                                  />
+                <ModalEditExamen openModalEdit={onOpenModalEdit}
+                                 handleCloseModalEdit={handleOnCloseModalEdit}
+                                 dataEdit={dataEdit}/>
             </MuiPaperPage>
         </>
     )

@@ -6,6 +6,11 @@ export async function getExamsByCompanyDB(idCompany) {
 }
 
 export async function storeExamenDB(data) {
-    console.log(data)
+
     return await laboratorioApi.post('exams', data);
+}
+
+export async function updateExamenDB(id, data) {
+
+    return await laboratorioApi.patch(`exams/${ id }`, data);
 }
